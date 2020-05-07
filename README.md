@@ -5,3 +5,5 @@ Exporting the markers from a NLE (ie Davinci Resolve) to use those markers as th
 This utility simply takes the EDL text, converts it into what youtube wants. Additional filtering for colours (ie, make blue chapter titles, yellow other notes)
 
 Online version found at https://www.thewoodknight.com/edlyt/
+
+This is a client-side Blazor app, because... it is.
