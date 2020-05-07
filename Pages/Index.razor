@@ -1,7 +1,7 @@
 ﻿@page "/"
 
 <style>
-    .float { float:left; width: 40%;}
+    .float { float:left; width: 45%; margin:5px;}
     .clear { clear: both;}
     textarea { width : 100%;}
 </style>
@@ -11,24 +11,34 @@
     <div class="clear">&nbsp;</div>
 
     <div class="float">
-        <h3>Input</h3>
+        <h3>Input (EDL)</h3>
         <textarea @bind="Input" id="inputtext" rows="25"></textarea>
+        <h4>Options</h4>
+        <ul>
+            <li>
+                <input type="checkbox" id="dummy" name="dummy" value="dummy" checked="checked">
+                <label for="dummy">Insert dummy 00:00 </label><br />
+                If unticked, you need to manually add <em>00:00 - Video Start</em>, otherwise Youtube won't recognise the chapters at all.
+            </li>
+        </ul>
     </div>
 
     <div class="float">
-        <h3>Output</h3>
-        <textarea @bind="Output" rows="25"></textarea>
+        <h3>Output (YT compatible chapters)</h3>
+        <textarea @bind="Output" readonly="readonly" rows="25"></textarea>
+        <h4>Filters</h4>
+        <ul>
+            @foreach (var c in Colours)
+            {
+                <li>
+                    <input type="checkbox" id="@c.Label" name="@c.Label" value="@c.Label" @onchange="eventArgs => { CheckboxClicked(c, eventArgs.Value); }" checked="checked">
+                    <label for="@c.Label"> @c.Label</label>
+                </li>
+            }
+        </ul>
     </div>
     <div class="clear">&nbsp;</div>
 
-    <ul>
-        @foreach (var c in Colours)
-        {
-            <li>
-                <input type="checkbox" id="@c.Label" name="@c.Label" value="@c.Label" @onchange="eventArgs => { CheckboxClicked(c, eventArgs.Value); }" checked="checked">
-                <label for="@c.Label"> @c.Label</label>
-            </li>
-        }
-    </ul>
+
     <button class="btn btn-primary" @onclick="ConvertClick">Convert</button>
     </div>
