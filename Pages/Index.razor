@@ -1,0 +1,34 @@
+﻿@page "/"
+
+<style>
+    .float { float:left; width: 40%;}
+    .clear { clear: both;}
+    textarea { width : 100%;}
+</style>
+<div>
+    <h1>EDL to Youtube</h1>
+    EDL (Edit Decision List) of markers exported from an NLE (ie, Davinci Resolve), then converted to the timestamp/chapter marks that youtube can process.<br />
+    <div class="clear">&nbsp;</div>
+
+    <div class="float">
+        <h3>Input</h3>
+        <textarea @bind="Input" id="inputtext" rows="25"></textarea>
+    </div>
+
+    <div class="float">
+        <h3>Output</h3>
+        <textarea @bind="Output" rows="25"></textarea>
+    </div>
+    <div class="clear">&nbsp;</div>
+
+    <ul>
+        @foreach (var c in Colours)
+        {
+            <li>
+                <input type="checkbox" id="@c.Label" name="@c.Label" value="@c.Label" @onchange="eventArgs => { CheckboxClicked(c, eventArgs.Value); }" checked="checked">
+                <label for="@c.Label"> @c.Label</label>
+            </li>
+        }
+    </ul>
+    <button class="btn btn-primary" @onclick="ConvertClick">Convert</button>
+    </div>
