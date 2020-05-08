@@ -1,9 +1,21 @@
 ﻿@page "/"
+@using System.IO;
+@inject IFileReaderService fileReaderService;
 
 <style>
-    .float { float:left; width: 45%; margin:5px;}
-    .clear { clear: both;}
-    textarea { width : 100%;}
+    .float {
+        float: left;
+        width: 45%;
+        margin: 5px;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+    textarea {
+        width: 100%;
+    }
 </style>
 <div>
     <h1>EDL to Youtube</h1>
@@ -11,7 +23,6 @@
 
     <a href="sample.txt"> Sample EDL</a><br />
     <div class="clear">&nbsp;</div>
-
     <div class="float">
         <h3>Input (EDL)</h3>
         <textarea @bind="Input" id="inputtext" rows="25"></textarea>
@@ -41,6 +52,9 @@
     </div>
     <div class="clear">&nbsp;</div>
 
+    <input class="btn btn-primary" type="file" @ref=inputElement @onchange=ReadFile> or <button class="btn btn-primary" @onclick="ConvertClick">Convert text area (manual input)</button>
+</div>
 
-    <button class="btn btn-primary" @onclick="ConvertClick">Convert</button>
-    </div>
+@code {
+    ElementReference inputElement;
+}

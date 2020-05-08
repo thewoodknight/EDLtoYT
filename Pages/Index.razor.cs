@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace EDLtoYT.Pages
 {
@@ -94,6 +95,29 @@ namespace EDLtoYT.Pages
                 sb.AppendLine(string.Format("{0} - {1}", m.Time.ToString(@"mm\:ss"), m.MarkerText));
             }
             return sb;
+        }
+
+        public async Task ReadFile()
+        {
+
+
+            foreach (var file in await fileReaderService.CreateReference(inputElement).EnumerateFilesAsync())
+            {
+                // Read into buffer and act (uses less memory)
+                await using (Stream stream = await file.OpenReadAsync())
+                {
+                    // Do (async) stuff with stream...
+                    var sr = new StreamReader(stream);
+                    var x = await sr.ReadToEndAsync();
+                    Input = x;
+                    if (!string.IsNullOrEmpty(Input))
+                    {
+                        ConvertClick();
+                        break;
+                    }
+                }
+
+            }
         }
     }
 
