@@ -18,14 +18,14 @@
     }
 </style>
 <div>
-    <h1>EDL to Youtube</h1>
     EDL (Edit Decision List) of markers exported from an NLE (ie, Davinci Resolve), then converted to the timestamp/chapter marks that youtube can process.<br />
 
+    <img src="example.jpg" /><br />
     <a href="sample.txt"> Sample EDL</a><br />
     <div class="clear">&nbsp;</div>
     <div class="float">
         <h3>Input (EDL)</h3>
-        <textarea @bind="Input" id="inputtext" rows="25"></textarea>
+        <textarea @bind="Input" id="inputtext" rows="15"></textarea>
         <h4>Options</h4>
         <ul>
             <li>
@@ -38,7 +38,7 @@
 
     <div class="float">
         <h3>Output (YT compatible chapters)</h3>
-        <textarea @bind="Output" readonly="readonly" rows="25"></textarea>
+        <textarea @bind="Output" readonly="readonly" rows="15"></textarea>
         <h4>Filters</h4>
         <ul>
             @foreach (var c in Colours)
