@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EDLtoYT.Pages
+namespace EDLtoYT.Models
 {
     public class Marker
     {
@@ -8,6 +8,4 @@ namespace EDLtoYT.Pages
         public string MarkerText { get; set; }
         public TimeSpan Time { get; set; }
     }
-
 }
-

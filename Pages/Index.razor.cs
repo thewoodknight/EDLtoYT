@@ -1,6 +1,6 @@
-﻿using System;
+﻿using EDLtoYT.Models;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,25 +9,43 @@ using System.Threading.Tasks;
 
 namespace EDLtoYT.Pages
 {
-    public class MarkerColour
-    {
-        public string Label { get; set; }
-        public bool Checked { get; set; }
-    }
     public partial class Index
     {
-        //001  001      V     C        00:01:00:14 00:01:00:15 00:01:00:14 00:01:00:15  
-        Regex TimePattern = new Regex(@"(?:[0-9]):[0-5][0-9]:[0-5][0-9].[0-9][0-9]", RegexOptions.Compiled);
-
         //|C:ResolveColorBlue |M:Whats Blockboard? |D:1
-        Regex MarkerPattern = new Regex(@"\|C:([a-zA-Z]*) \|M:([a-zA-Z ?&]*) \|D:1", RegexOptions.Compiled);
+        private Regex MarkerPattern = new Regex(@"\|C:([a-zA-Z]*) \|M:([a-zA-Z \\/?&]*) \|D:1", RegexOptions.Compiled);
 
+        //001  001      V     C        00:01:00:14 00:01:00:15 00:01:00:14 00:01:00:15
+        private Regex TimePattern = new Regex(@"(?:[0-9]):[0-5][0-9]:[0-5][0-9].[0-9][0-9]", RegexOptions.Compiled);
+
+        public List<MarkerColour> Colours = new List<MarkerColour>();
+        public List<Marker> Markers = new List<Marker>();
         public string Input { get; set; }
         public string Output { get; set; }
 
-        public List<Marker> Markers = new List<Marker>();
+        private void OutputText()
+        {
+            StringBuilder output = new StringBuilder();
+            var x = Colours.Where(c => c.Checked).Select(c => c.Label).ToList();
+            RenderMarkers(output, Markers.Where(m => x.Contains(m.Colour)));
+            Output = output.ToString();
+        }
 
-        public List<MarkerColour> Colours = new List<MarkerColour>();
+        private StringBuilder RenderMarkers(StringBuilder sb, IEnumerable<Marker> _markers)
+        {
+            foreach (var m in _markers)
+            {
+                //Format is suitable for <1hr videos
+                sb.AppendLine(string.Format("{0} - {1}", m.Time.ToString(@"mm\:ss"), m.MarkerText));
+            }
+            return sb;
+        }
+
+        public void CheckboxClicked(MarkerColour c, object checkedValue)
+        {
+            c.Checked = !c.Checked;
+            OutputText();
+        }
+
         public void ConvertClick()
         {
             Markers.Clear();
@@ -65,42 +83,17 @@ namespace EDLtoYT.Pages
             }
 
             Colours = Markers.Select(m => m.Colour).Distinct().Select(o =>
-                        new MarkerColour
-                        {
-                            Checked = true,
-                            Label = o
-                        }).ToList();
+                          new MarkerColour
+                          {
+                              Checked = true,
+                              Label = o
+                          }).ToList();
 
             OutputText();
-        }
-        public void CheckboxClicked(MarkerColour c, object checkedValue)
-        {
-            c.Checked = !c.Checked;
-            OutputText();
-
-        }
-        private void OutputText()
-        {
-            StringBuilder output = new StringBuilder();
-            var x = Colours.Where(c => c.Checked).Select(c => c.Label).ToList();
-            RenderMarkers(output, Markers.Where(m => x.Contains(m.Colour)));
-            Output = output.ToString();
-        }
-
-        private StringBuilder RenderMarkers(StringBuilder sb, IEnumerable<Marker> _markers)
-        {
-            foreach (var m in _markers)
-            {
-                //Format is suitable for <1hr videos
-                sb.AppendLine(string.Format("{0} - {1}", m.Time.ToString(@"mm\:ss"), m.MarkerText));
-            }
-            return sb;
         }
 
         public async Task ReadFile()
         {
-
-
             foreach (var file in await fileReaderService.CreateReference(inputElement).EnumerateFilesAsync())
             {
                 // Read into buffer and act (uses less memory)
@@ -116,10 +109,7 @@ namespace EDLtoYT.Pages
                         break;
                     }
                 }
-
             }
         }
     }
-
 }
-
