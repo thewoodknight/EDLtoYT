@@ -12,7 +12,7 @@ namespace EDLtoYT.Pages
     public partial class Index
     {
         //|C:ResolveColorBlue |M:Whats Blockboard? |D:1
-        private Regex MarkerPattern = new Regex(@"\|C:([a-zA-Z]*) \|M:([a-zA-Z \\/?&]*) \|D:1", RegexOptions.Compiled);
+        private Regex MarkerPattern = new Regex(@"\|C:([a-zA-Z]*) \|M:([a-zA-Z0-9\\.\\,()\\#\\:\-\\! \\/?&]*) \|D:1", RegexOptions.Compiled);
 
         //001  001      V     C        00:01:00:14 00:01:00:15 00:01:00:14 00:01:00:15
         private Regex TimePattern = new Regex(@"(?:[0-9]):[0-5][0-9]:[0-5][0-9].[0-9][0-9]", RegexOptions.Compiled);
