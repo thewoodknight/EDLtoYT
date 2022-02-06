@@ -21,6 +21,7 @@ namespace EDLtoYT.Pages
         public List<Marker> Markers = new List<Marker>();
         public string Input { get; set; }
         public string Output { get; set; }
+        public bool dummy {get; set;}
 
         private void OutputText()
         {
@@ -51,7 +52,8 @@ namespace EDLtoYT.Pages
             Markers.Clear();
 
             //Do we need to output "video start"?
-            Markers.Add(new Marker() { Time = new TimeSpan(0), MarkerText = "Video Start" });
+            if (dummy)
+                Markers.Add(new Marker() { Time = new TimeSpan(0), MarkerText = "Video Start" });
 
             using (var reader = new StringReader(Input))
             {
