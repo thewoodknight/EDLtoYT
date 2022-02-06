@@ -41,6 +41,11 @@ namespace EDLtoYT.Pages
             return sb;
         }
 
+        public void DummyChecked()
+        {
+            dummy = !dummy;
+        }
+
         public void CheckboxClicked(MarkerColour c, object checkedValue)
         {
             c.Checked = !c.Checked;
