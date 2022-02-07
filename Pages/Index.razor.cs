@@ -15,19 +15,20 @@ namespace EDLtoYT.Pages
         private Regex MarkerPattern = new Regex(@"\|C:([a-zA-Z]*) \|M:([a-zA-Z0-9\\.\\,()\\#\\:\-\\! \\/?&]*) \|D:1", RegexOptions.Compiled);
 
         //001  001      V     C        00:01:00:14 00:01:00:15 00:01:00:14 00:01:00:15
-        private Regex TimePattern = new Regex(@"(?:[0-9]):[0-5][0-9]:[0-5][0-9].[0-9][0-9]", RegexOptions.Compiled);
+        private Regex TimePattern = new Regex(@"(?:[0-9][0-9]):[0-5][0-9]:[0-5][0-9].[0-9][0-9]", RegexOptions.Compiled);
 
         public List<MarkerColour> Colours = new List<MarkerColour>();
         public List<Marker> Markers = new List<Marker>();
         public string Input { get; set; }
         public string Output { get; set; }
         public bool dummy {get; set;}
+        public bool padHours { get; set; }
 
         private void OutputText()
         {
             StringBuilder output = new StringBuilder();
             var x = Colours.Where(c => c.Checked).Select(c => c.Label).ToList();
-            RenderMarkers(output, Markers.Where(m => x.Contains(m.Colour)));
+            RenderMarkers(output, Markers.Where(m => x.Contains(m.Colour)).OrderBy(m => m.Time));
             Output = output.ToString();
         }
 
@@ -36,7 +37,10 @@ namespace EDLtoYT.Pages
             foreach (var m in _markers)
             {
                 //Format is suitable for <1hr videos
-                sb.AppendLine(string.Format("{0} - {1}", m.Time.ToString(@"mm\:ss"), m.MarkerText));
+                if (m.Time.Hours > 0 || padHours)
+                    sb.AppendLine(string.Format("{0} - {1}", m.Time.ToString(@"hh\:mm\:ss"), m.MarkerText));
+                else 
+                    sb.AppendLine(string.Format("{0} - {1}", m.Time.ToString(@"mm\:ss"), m.MarkerText));
             }
             return sb;
         }
@@ -44,6 +48,11 @@ namespace EDLtoYT.Pages
         public void DummyChecked()
         {
             dummy = !dummy;
+        }
+
+        public void PadHoursChecked()
+        {
+            padHours = !padHours;
         }
 
         public void CheckboxClicked(MarkerColour c, object checkedValue)

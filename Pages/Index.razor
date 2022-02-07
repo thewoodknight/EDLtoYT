@@ -33,6 +33,12 @@
                 <label for="dummy">Insert dummy 00:00 </label><br />
                 If unticked, you need to manually add <em>00:00 - Video Start</em>, otherwise Youtube won't recognise the chapters at all.
             </li>
+
+            <li>
+                <input type="checkbox" id="padhours" @onchange="eventArgs => { PadHoursChecked(); }">
+                <label for="padhours">Pad Hours</label><br />
+                Pad all markers to include hours, ie [01:00] would become [00:01:00]
+            </li>
         </ul>
     </div>
 
